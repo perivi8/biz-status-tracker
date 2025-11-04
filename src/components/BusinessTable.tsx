@@ -34,7 +34,7 @@ const BusinessTable = () => {
   const [businessToUpdateStatus, setBusinessToUpdateStatus] = useState<Business | null>(null);
   const [searchName, setSearchName] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
-  const [sortBy, setSortBy] = useState<"name" | "date-new" | "date-old" | "none">("none");
+  const [sortBy, setSortBy] = useState<"name" | "date-new" | "date-old" | "none">("date-new");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
