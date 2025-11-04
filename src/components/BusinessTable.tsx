@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Edit, Trash2, Plus, Search, SortAsc, Loader2 } from "lucide-react";
+import { Edit, Trash2, Plus, Search, SortAsc, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 export type StatusType = "green" | "red" | "yellow" | "";
@@ -37,6 +37,8 @@ const BusinessTable = () => {
   const [sortBy, setSortBy] = useState<"name" | "date-new" | "date-old" | "none">("none");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 30;
 
   // Fetch businesses from backend
   useEffect(() => {
@@ -84,6 +86,22 @@ const BusinessTable = () => {
       }
       return 0;
     });
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchName, searchPhone, sortBy]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredBusinesses.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBusinesses = filteredBusinesses.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getStatusColor = (status: StatusType) => {
     switch (status) {
@@ -310,7 +328,7 @@ const BusinessTable = () => {
         {(searchName || searchPhone || sortBy !== "none") && (
           <div className="mt-3 flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Showing {filteredBusinesses.length} of {businesses.length} businesses
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} filtered businesses (Total: {businesses.length})
             </p>
             <Button
               variant="ghost"
@@ -323,6 +341,13 @@ const BusinessTable = () => {
             >
               Clear Filters
             </Button>
+          </div>
+        )}
+        {!(searchName || searchPhone || sortBy !== "none") && filteredBusinesses.length > 0 && (
+          <div className="mt-3">
+            <p className="text-sm text-muted-foreground">
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} businesses
+            </p>
           </div>
         )}
       </div>
@@ -350,7 +375,7 @@ const BusinessTable = () => {
               <p className="text-gray-500 text-lg">No businesses found</p>
             </div>
           ) : (
-            filteredBusinesses.map((business, index) => (
+            paginatedBusinesses.map((business, index) => (
               <div
                 key={business.id}
                 className={`${getStatusColor(business.status)} rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-3 md:p-4 group animate-in fade-in slide-in-from-bottom-4 duration-300`}
@@ -361,7 +386,7 @@ const BusinessTable = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-xs">
-                        {index + 1}
+                        {startIndex + index + 1}
                       </span>
                       <div>
                         <div className="font-bold text-gray-800 text-sm">{business.businessName}</div>
@@ -426,7 +451,7 @@ const BusinessTable = () => {
                   {/* S.No */}
                   <div className="col-span-1 text-center">
                     <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-700 text-white font-bold text-sm">
-                      {index + 1}
+                      {startIndex + index + 1}
                     </span>
                   </div>
 
@@ -504,6 +529,89 @@ const BusinessTable = () => {
           )}
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {filteredBusinesses.length > 0 && totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card rounded-lg border border-border p-4 shadow-sm">
+          <div className="text-sm text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+              className="h-9 px-3"
+            >
+              First
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="h-9 px-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+
+            {/* Page Numbers */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handlePageChange(pageNum)}
+                    className="h-9 w-9 p-0"
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="h-9 px-2"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+              className="h-9 px-3"
+            >
+              Last
+            </Button>
+          </div>
+
+          <div className="text-sm text-muted-foreground">
+            {itemsPerPage} per page
+          </div>
+        </div>
+      )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-white to-slate-50 border-2 border-slate-200 animate-in fade-in zoom-in-95 duration-200">
