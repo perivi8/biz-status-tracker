@@ -325,7 +325,7 @@ const BusinessTable = () => {
             </Select>
           </div>
         </div>
-        {(searchName || searchPhone || sortBy !== "none") && (
+        {(searchName || searchPhone || (sortBy !== "none" && sortBy !== "date-new")) && (
           <div className="mt-3 flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
               Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} filtered businesses (Total: {businesses.length})
@@ -336,14 +336,14 @@ const BusinessTable = () => {
               onClick={() => {
                 setSearchName("");
                 setSearchPhone("");
-                setSortBy("none");
+                setSortBy("date-new");
               }}
             >
               Clear Filters
             </Button>
           </div>
         )}
-        {!(searchName || searchPhone || sortBy !== "none") && filteredBusinesses.length > 0 && (
+        {!(searchName || searchPhone || (sortBy !== "none" && sortBy !== "date-new")) && filteredBusinesses.length > 0 && (
           <div className="mt-3">
             <p className="text-sm text-muted-foreground">
               Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} businesses
