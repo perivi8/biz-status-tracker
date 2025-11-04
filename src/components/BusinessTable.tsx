@@ -530,85 +530,172 @@ const BusinessTable = () => {
         </div>
       </div>
 
-      {/* Pagination Controls */}
-      {filteredBusinesses.length > 0 && totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card rounded-lg border border-border p-4 shadow-sm">
-          <div className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === 1}
-              className="h-9 px-3"
-            >
-              First
-            </Button>
+      {/* Pagination Controls - Bottom */}
+      {filteredBusinesses.length > itemsPerPage && (
+        <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg border-2 border-slate-300 p-3 md:p-4 shadow-md mt-4">
+          {/* Mobile View */}
+          <div className="md:hidden space-y-3">
+            {/* Page Info */}
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-semibold text-slate-700">
+                Page {currentPage} of {totalPages}
+              </div>
+              <div className="text-xs font-semibold text-slate-700">
+                {itemsPerPage} rows/page
+              </div>
+            </div>
             
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="h-9 px-2"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="h-10 px-3 text-xs font-medium flex-1 max-w-[70px]"
+              >
+                First
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="h-10 w-10 p-0"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
 
-            {/* Page Numbers */}
-            <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-                
-                return (
-                  <Button
-                    key={pageNum}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handlePageChange(pageNum)}
-                    className="h-9 w-9 p-0"
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
+              {/* Page Numbers - Show 3 on mobile */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage === 1) {
+                    pageNum = i + 1;
+                  } else if (currentPage === totalPages) {
+                    pageNum = totalPages - 2 + i;
+                  } else {
+                    pageNum = currentPage - 1 + i;
+                  }
+                  
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(pageNum)}
+                      className="h-10 w-10 p-0 font-semibold text-sm"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="h-10 w-10 p-0"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="h-10 px-3 text-xs font-medium flex-1 max-w-[70px]"
+              >
+                Last
+              </Button>
+            </div>
+          </div>
+
+          {/* Desktop View */}
+          <div className="hidden md:flex flex-row items-center justify-between gap-4">
+            <div className="text-sm font-semibold text-slate-700">
+              Page {currentPage} of {totalPages}
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="h-9 px-3 font-medium"
+              >
+                First
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="h-9 px-2"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+
+              {/* Page Numbers - Show 5 on desktop */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(pageNum)}
+                      className="h-9 w-9 p-0 font-semibold"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="h-9 px-2"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="h-9 px-3 font-medium"
+              >
+                Last
+              </Button>
             </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="h-9 px-2"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages}
-              className="h-9 px-3"
-            >
-              Last
-            </Button>
-          </div>
-
-          <div className="text-sm text-muted-foreground">
-            {itemsPerPage} per page
+            <div className="text-sm font-semibold text-slate-700">
+              {itemsPerPage} rows per page
+            </div>
           </div>
         </div>
       )}
