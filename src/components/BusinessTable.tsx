@@ -554,7 +554,13 @@ const BusinessTable = () => {
                     id="phone"
                     placeholder="Enter phone number"
                     value={editingBusiness.phone}
-                    onChange={(e) => setEditingBusiness({ ...editingBusiness, phone: e.target.value })}
+                    onChange={(e) => {
+                      // Remove all spaces from the input
+                      let cleanedValue = e.target.value.replace(/\s/g, '');
+                      // Remove leading zeros
+                      cleanedValue = cleanedValue.replace(/^0+/, '');
+                      setEditingBusiness({ ...editingBusiness, phone: cleanedValue });
+                    }}
                     className="border-2 border-slate-200 focus:border-blue-500 transition-colors h-10 md:h-11 text-sm"
                   />
                 </div>
@@ -573,20 +579,22 @@ const BusinessTable = () => {
                 </div>
               </div>
 
-              {/* Comment */}
-              <div className="space-y-2">
-                <Label htmlFor="comment" className="text-xs md:text-sm font-semibold text-slate-700 flex items-center gap-1 md:gap-2">
-                  <span className="text-rose-600">●</span> Comment / Notes
-                </Label>
-                <Textarea
-                  id="comment"
-                  placeholder="Add any additional notes or comments..."
-                  value={editingBusiness.comment}
-                  onChange={(e) => setEditingBusiness({ ...editingBusiness, comment: e.target.value })}
-                  rows={3}
-                  className="border-2 border-slate-200 focus:border-rose-500 transition-colors resize-none text-sm"
-                />
-              </div>
+              {/* Comment - Only show in Edit Mode */}
+              {!isAddMode && (
+                <div className="space-y-2">
+                  <Label htmlFor="comment" className="text-xs md:text-sm font-semibold text-slate-700 flex items-center gap-1 md:gap-2">
+                    <span className="text-rose-600">●</span> Comment / Notes
+                  </Label>
+                  <Textarea
+                    id="comment"
+                    placeholder="Add any additional notes or comments..."
+                    value={editingBusiness.comment}
+                    onChange={(e) => setEditingBusiness({ ...editingBusiness, comment: e.target.value })}
+                    rows={3}
+                    className="border-2 border-slate-200 focus:border-rose-500 transition-colors resize-none text-sm"
+                  />
+                </div>
+              )}
 
               {/* Status Selection - Only show in Edit Mode */}
               {!isAddMode && (
