@@ -34,7 +34,7 @@ const BusinessTable = () => {
   const [businessToUpdateStatus, setBusinessToUpdateStatus] = useState<Business | null>(null);
   const [searchName, setSearchName] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
-  const [statusFilter, setStatusFilter] = useState<StatusType | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<StatusType | "all" | "not-set">("all");
   const [sortBy, setSortBy] = useState<"name" | "date-new" | "date-old" | "none">("date-new");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -67,7 +67,9 @@ const BusinessTable = () => {
     .filter(business => {
       const matchesName = business.businessName.toLowerCase().includes(searchName.toLowerCase());
       const matchesPhone = business.phone.includes(searchPhone);
-      const matchesStatus = statusFilter === "all" || business.status === statusFilter;
+      const matchesStatus = statusFilter === "all" || 
+                           (statusFilter === "not-set" && business.status === "") ||
+                           business.status === statusFilter;
       return matchesName && matchesPhone && matchesStatus;
     })
     .sort((a, b) => {
@@ -314,7 +316,7 @@ const BusinessTable = () => {
               <Search className="h-4 w-4" />
               Filter by Status
             </Label>
-            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as StatusType | "all")}>
+            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as StatusType | "all" | "not-set")}>
               <SelectTrigger id="statusFilter" className="w-full">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -323,7 +325,7 @@ const BusinessTable = () => {
                 <SelectItem value="green">Interested</SelectItem>
                 <SelectItem value="yellow">Hold</SelectItem>
                 <SelectItem value="red">Not Interested</SelectItem>
-                <SelectItem value="">Not Set</SelectItem>
+                <SelectItem value="not-set">Not Set</SelectItem>
               </SelectContent>
             </Select>
           </div>
