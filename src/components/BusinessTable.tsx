@@ -34,6 +34,7 @@ const BusinessTable = () => {
   const [businessToUpdateStatus, setBusinessToUpdateStatus] = useState<Business | null>(null);
   const [searchName, setSearchName] = useState("");
   const [searchPhone, setSearchPhone] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusType | "all">("all");
   const [sortBy, setSortBy] = useState<"name" | "date-new" | "date-old" | "none">("date-new");
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -66,7 +67,8 @@ const BusinessTable = () => {
     .filter(business => {
       const matchesName = business.businessName.toLowerCase().includes(searchName.toLowerCase());
       const matchesPhone = business.phone.includes(searchPhone);
-      return matchesName && matchesPhone;
+      const matchesStatus = statusFilter === "all" || business.status === statusFilter;
+      return matchesName && matchesPhone && matchesStatus;
     })
     .sort((a, b) => {
       if (sortBy === "name") {
@@ -90,7 +92,7 @@ const BusinessTable = () => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchName, searchPhone, sortBy]);
+  }, [searchName, searchPhone, statusFilter, sortBy]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredBusinesses.length / itemsPerPage);
@@ -280,7 +282,7 @@ const BusinessTable = () => {
 
       {/* Filter Section */}
       <div className="bg-card rounded-lg border border-border p-4 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="space-y-2">
             <Label htmlFor="searchName" className="flex items-center gap-2">
               <Search className="h-4 w-4" />
@@ -308,6 +310,24 @@ const BusinessTable = () => {
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="statusFilter" className="flex items-center gap-2">
+              <Search className="h-4 w-4" />
+              Filter by Status
+            </Label>
+            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as StatusType | "all")}>
+              <SelectTrigger id="statusFilter" className="w-full">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="green">Interested</SelectItem>
+                <SelectItem value="yellow">Hold</SelectItem>
+                <SelectItem value="red">Not Interested</SelectItem>
+                <SelectItem value="">Not Set</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="sortBy" className="flex items-center gap-2">
               <SortAsc className="h-4 w-4" />
               Sort By
@@ -325,7 +345,7 @@ const BusinessTable = () => {
             </Select>
           </div>
         </div>
-        {(searchName || searchPhone || (sortBy !== "none" && sortBy !== "date-new")) && (
+        {(searchName || searchPhone || statusFilter !== "all" || (sortBy !== "none" && sortBy !== "date-new")) && (
           <div className="mt-3 flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
               Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} filtered businesses (Total: {businesses.length})
@@ -336,6 +356,7 @@ const BusinessTable = () => {
               onClick={() => {
                 setSearchName("");
                 setSearchPhone("");
+                setStatusFilter("all");
                 setSortBy("date-new");
               }}
             >
@@ -343,7 +364,7 @@ const BusinessTable = () => {
             </Button>
           </div>
         )}
-        {!(searchName || searchPhone || (sortBy !== "none" && sortBy !== "date-new")) && filteredBusinesses.length > 0 && (
+        {!(searchName || searchPhone || statusFilter !== "all" || (sortBy !== "none" && sortBy !== "date-new")) && filteredBusinesses.length > 0 && (
           <div className="mt-3">
             <p className="text-sm text-muted-foreground">
               Showing {startIndex + 1}-{Math.min(endIndex, filteredBusinesses.length)} of {filteredBusinesses.length} businesses
