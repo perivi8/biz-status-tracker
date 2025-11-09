@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Edit, Trash2, Plus, Search, SortAsc, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit, Trash2, Plus, Search, SortAsc, Loader2, ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export type StatusType = "green" | "red" | "yellow" | "";
@@ -452,6 +452,15 @@ const BusinessTable = () => {
                   </div>
 
                   <div className="flex gap-2 pt-2 border-t border-gray-200">
+                    <a
+                      href={`https://wa.me/${business.phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm text-xs font-medium flex items-center justify-center gap-1"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      WhatsApp
+                    </a>
                     <button
                       onClick={() => handleEdit(business)}
                       className="flex-1 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-sm text-xs font-medium flex items-center justify-center gap-1"
@@ -531,6 +540,15 @@ const BusinessTable = () => {
 
                   {/* Action Buttons */}
                   <div className="col-span-1 flex gap-2 justify-center">
+                    <a
+                      href={`https://wa.me/${business.phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm hover:shadow-md"
+                      title="WhatsApp"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </a>
                     <button
                       onClick={() => handleEdit(business)}
                       className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors shadow-sm hover:shadow-md"
