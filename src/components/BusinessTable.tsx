@@ -453,7 +453,7 @@ const BusinessTable = () => {
 
                   <div className="flex gap-2 pt-2 border-t border-gray-200">
                     <a
-                      href={`https://wa.me/${business.phone}`}
+                      href={`https://wa.me/91${business.phone}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm text-xs font-medium flex items-center justify-center gap-1"
@@ -541,7 +541,7 @@ const BusinessTable = () => {
                   {/* Action Buttons */}
                   <div className="col-span-1 flex gap-2 justify-center">
                     <a
-                      href={`https://wa.me/${business.phone}`}
+                      href={`https://wa.me/91${business.phone}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm hover:shadow-md"
