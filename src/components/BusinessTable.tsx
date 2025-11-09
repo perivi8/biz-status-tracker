@@ -453,7 +453,7 @@ const BusinessTable = () => {
 
                   <div className="flex gap-2 pt-2 border-t border-gray-200">
                     <a
-                      href={`https://wa.me/91${business.phone}?text=${encodeURIComponent(`Hi there,\nHope you are doing well.\nI am from Nexovent Labs (India).\nWe build fast, modern business websites — delivered in 3–5 days — with WhatsApp button, Google Maps and basic SEO included.\nI came across ${business.businessName} and I believe we can help your business get more leads from Google / Instagram / WhatsApp.\nWould you like to see 2 sample demo websites?`)}`}
+                      href={`https://wa.me/91${business.phone}?text=${encodeURIComponent(`Hi there,\n\nHope you are doing well.\n\nI am from Nexovent Labs (India).\n\nWe build fast, modern business websites — delivered in 3–5 days — with WhatsApp button, Google Maps and basic SEO included.\n\nI came across ${business.businessName} and I believe we can help your business get more leads from Google / Instagram / WhatsApp.\n\nWould you like to see 2 sample demo websites?`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm text-xs font-medium flex items-center justify-center gap-1"
@@ -541,7 +541,7 @@ const BusinessTable = () => {
                   {/* Action Buttons */}
                   <div className="col-span-1 flex gap-2 justify-center">
                     <a
-                      href={`https://wa.me/91${business.phone}?text=${encodeURIComponent(`Hi there,\nHope you are doing well.\nI am from Nexovent Labs (India).\nWe build fast, modern business websites — delivered in 3–5 days — with WhatsApp button, Google Maps and basic SEO included.\nI came across ${business.businessName} and I believe we can help your business get more leads from Google / Instagram / WhatsApp.\nWould you like to see 2 sample demo websites?`)}`}
+                      href={`https://wa.me/91${business.phone}?text=${encodeURIComponent(`Hi there,\n\nHope you are doing well.\n\nI am from Nexovent Labs (India).\n\nWe build fast, modern business websites — delivered in 3–5 days — with WhatsApp button, Google Maps and basic SEO included.\n\nI came across ${business.businessName} and I believe we can help your business get more leads from Google / Instagram / WhatsApp.\n\nWould you like to see 2 sample demo websites?`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors shadow-sm hover:shadow-md"
