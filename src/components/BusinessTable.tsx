@@ -20,7 +20,7 @@ export interface Business {
   createdAt?: string;
 }
 
-const API_URL = "https://leads-backend-mntd.onrender.com/api";
+const API_URL = "https://leads-backend-f4s1.onrender.com/api";
 
 const BusinessTable = () => {
   const [businesses, setBusinesses] = useState<Business[]>([]);
